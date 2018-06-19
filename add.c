@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[]) {
   if(argc<=1) {
-    fprintf(stderr,"%s {char|short|int|float|double} number < input > output\n",argv[0]);
+    fprintf(stderr,"%s {char|short|Short (unsigned short)|int|float|double} number < input > output\n",argv[0]);
     fprintf(stderr,"Add every item by \"number\"\n");
     return 1;
   }
@@ -53,6 +53,29 @@ int main(int argc, char *argv[]) {
 	}
       }
       fwrite(buf,sizeof(short),r,stdout);
+    }
+  }
+
+  if(argv[1][0]=='S') {
+    int num;
+    unsigned short buf[BUF_SIZE];
+#if defined DEBUG
+    fprintf(stderr,"%s: data type: unsigned short\n",argv[0]);
+#endif
+    num=atoi(argv[2]); 
+#if defined DEBUG
+    fprintf(stderr,"%s: adding by %d\n",argv[0],num);
+#endif
+    for(;;) {
+      int r = fread(buf,sizeof(unsigned short),BUF_SIZE,stdin);
+      if(r==0) break;
+      {
+	int i;
+	for(i=0; i<r; i++) {
+	  buf[i] += num;
+	}
+      }
+      fwrite(buf,sizeof(unsigned short),r,stdout);
     }
   }
 
